@@ -5,31 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css?family=PT+Sans&display=swap&subset=cyrillic,cyrillic-ext" rel="stylesheet">
     <link href = "css/main.css" rel = "stylesheet">
-    <!-- <script src="https://api-maps.yandex.ru/2.1/?apikey=ee24b962-3258-45ad-8d30-41dcd7fc2b43&lang=ru_RU" type="text/javascript"></script> -->
-    <script src="https://api-maps.yandex.ru/2.1/?apikey=b495101b-0f61-4b6f-bd20-c0444f11e362&lang=ru_RU" type="text/javascript"></script>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=YOUR_API_KEY&lang=ru_RU" type="text/javascript"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src = "vue.js"></script>
-    <script src = "scripts/api/behavior.js"></script>
+    <script src = "scripts/vue.js"></script>
+    <script src = "scripts/api/weatherBehavior.js"></script>
     <script src = "scripts/api/mapInit.js"></script>
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Weather api test</title>
+    <title>Weather yandex api</title>
 </head>
 <body>
     <div id = "app">
-        <div id = "map-info">
-            <div id = "map"></div>
-            <div id = "weather-info">
+        <div class = "map-container" id = "map-weather-info">
+            <div id = "map-weather" class = "map"></div>
+            <div class = "more-info" id = "weather-info">
                 <div id = "weather-temp">Temperature: {{ temperature }} °C</div>
                 <div id = "weather-condition-container">
                     <div id = "weather-condition">Condition: {{ condition }}</div>
-                    <img v-bind:src = "urlSvg" width = "24" height = "24">
+                    <img v-show = "urlSvg != ''" v-bind:src = "urlSvg">
                 </div>
-                <div id = "weather-part-name">Time of day: {{ partName }}</div>
-                
+                <div id = "weather-part-name">Time of day: {{ partName }}</div>    
             </div>
         </div>
     </div>
     <script>
+        // VUE CODE
+
         const app = new Vue({
             el: "#app",
             data: {
@@ -39,25 +39,25 @@
                 urlSvg: ""
             },
             created: function(){
-                ymaps.ready(mapInit);
+                if (window.location.pathname == "/index.php") window.location.pathname = "/"; // changing url
+                ymaps.ready(mapWeatherInit); // starting yandex maps
             },
             methods:{
                 createAjax: function(pos){
+                    // AJAX request to .php file, then it does request to yandex server
                     $.ajax({
                         type: "POST",
                         url: "scripts/request.php",
                         data: {'data': pos},
                         success: function(response){
                             const result = JSON.parse(response);
-                            if (result.isSuccess == 'true'){
+                            if (result.isSuccess) {
+                                // showing data
                                 app.temperature = result.data.fact.temp;
-                                // https://yastatic.net/weather/i/icons/blueye/color/svg/
                                 app.urlSvg = "https://yastatic.net/weather/i/icons/blueye/color/svg/" + result.data.forecast.parts[0].icon + ".svg";
-                                app.condition = result.data.forecast.parts[0].condition;
+                                app.condition = result.data.forecast.parts[0].condition.replace(/-/g, " ");
                                 app.partName = result.data.forecast.parts[0].part_name;
-                            }else{
-                                console.log("Error: " + result.message)
-                            }
+                            } else console.log("Error: " + result.message); // if we have error, show it into console
                         }
                     });
                 }

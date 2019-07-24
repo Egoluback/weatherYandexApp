@@ -4,19 +4,20 @@
     font-family: 'PT Sans', sans-serif;
 }
 
-#map-info{
+.map-container{
     display: flex;
+    background: rgb(250, 249, 249);
+    margin: 0.5vw;
 }
 
-#weather-info{
-    background: rgb(250, 249, 249);
+.more-info{
     width: 47.5vw;
     margin: 0.5vw;
     padding: 0.5vw;
     font-size: 1.5vw;
 }
 
-#map{
+.map{
     width: 50vw;
     height: 70vh;
     padding: 0.5vw;
@@ -24,4 +25,9 @@
 
 #weather-condition-container{
     display: flex;
+}
+
+img{
+    width: 1em;
+    height: 1em;
 }

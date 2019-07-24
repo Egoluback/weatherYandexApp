@@ -1,16 +1,24 @@
-function mapInit(){
-    var mainMap = new ymaps.Map("map", {
+// MAIN API file
+
+function mapWeatherInit(){
+    // creating yandex map, center - Moscow
+
+    var weatherMap = new ymaps.Map("map-weather", {
         center: [55.76, 37.64],
         zoom: 7,
         type: 'yandex#map'
     });
 
-    mainCollection = new ymaps.GeoObjectCollection({},{
+    // creating mark collection
+
+    weatherCollection = new ymaps.GeoObjectCollection({},{
         preset: 'islands#redIcon'
     });
 
-    mainMap.geoObjects.add(mainCollection);
+    weatherMap.geoObjects.add(weatherCollection); // adding collection into geoObjects
 
-    ymaps.behavior.storage.add('behavior', behavior);
-    mainMap.behaviors.enable('behavior');
+    // there is one more api file - weatherBehavior.js(class); i use it for tracking map events
+
+    ymaps.behavior.storage.add('behavior', weatherBehavior); // adding behavior into storage
+    weatherMap.behaviors.enable('behavior');
 }

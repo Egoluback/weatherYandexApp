@@ -1,21 +1,25 @@
 <?php
+// PHP FUNCTIONS
+
 function getContentCurl($url, $headers){
     $ch = curl_init();
 
+    // curl request options
     curl_setopt($ch, CURLOPT_HEADER, 0);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers); // setting HTTP headers
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE); // setting 'return' option(data won't be printed)
+    curl_setopt($ch, CURLOPT_URL, $url); // setting url
 
-    $data = curl_exec($ch);
-    $info = curl_getinfo($ch);
+    $data = curl_exec($ch); // sending request
+    $info = curl_getinfo($ch); // getting information about request
 
-    curl_close($ch);
+    curl_close($ch); // closing connection
 
     return json_decode($data, true);
 }
 
 function getApiKey(){
-    // return '4ae8bc8b-a016-4f69-9e28-1ef1ffec8b0b';
-    return 'de6aa569-d89b-4b10-9c84-fd1e1c5e4944';
+    // your api key
+    $key = '';
+    return $key;
 }
